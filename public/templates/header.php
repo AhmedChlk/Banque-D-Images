@@ -10,7 +10,10 @@
 <body>
     <header class="header">
         <div class="container">
-            <div class="logo">📸 MyImageBank</div>
+            <div class="logo">
+                <img src="assets/img/logo.png" alt="Logo">
+                <p>MyImageBank</p>
+            </div>
             <nav class="menu">
                 <a href="index.php">Accueil</a>
                 <a href="#">À propos</a>

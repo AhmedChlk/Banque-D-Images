@@ -47,9 +47,16 @@ body {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 24px;
   font-weight: 700;
 }
+
+.logo img {
+  height: 48px;
+} 
 
 .menu a {
   margin-left: 24px;
