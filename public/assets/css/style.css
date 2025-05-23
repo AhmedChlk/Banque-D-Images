@@ -174,40 +174,43 @@ body {
 .contacts-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   margin-top: 20px;
+  padding-left: 4px;
 }
+
 .contact-item {
   display: flex;
   align-items: center;
   gap: 10px;
+  font-size: 14px;
 }
-.avatar {
-  width: 28px;
-  height: 28px;
-  background: #CCC;
-  border-radius: 50%;
+
+.contact-icon {
+  font-size: 22px;
+  color: #444;
 }
+
 .contact-info {
-  font-size: 12px;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
   line-height: 1.2;
 }
+
 .contact-info .name {
-  font-weight: bold;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
 }
-.contact-info .tag {
-  color: #666;
-  font-size: 11px;
-}
-.comment-btn {
-  margin-left: auto;
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-}
-.comment-btn:hover {
-  color: #4A90E2;
+
+.contact-info .icons {
+  display: flex;
+  gap: 8px;
+  color: #777;
+  font-size: 13px;
+  padding: 0 15px;
 }
 
 /* ====================
