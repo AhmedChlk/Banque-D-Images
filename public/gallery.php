@@ -31,4 +31,6 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endforeach; ?>
     </main>
 </div>
+<script src="assets/js/sidebar-menu-handler.js"></script>
+
 <?php include 'templates/footer.php'; ?>

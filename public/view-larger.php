@@ -2,7 +2,7 @@
 
 <div class="page-wrapper">
     <?php include 'templates/sidebar.php'; ?>
-    <main class="main-content">
+    <main class="main-content larger-image-container">
     <div class="image-card larger-image">
         <div class="image-preview larger-image">
 
@@ -42,5 +42,5 @@
     </div>    
     </main>
 </div>
-
+<script src="assets/js/sidebar-menu-handler.js"></script>
 <?php include "templates/footer.php" ?>
