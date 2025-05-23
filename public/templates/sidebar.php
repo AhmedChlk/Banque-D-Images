@@ -19,14 +19,7 @@
     <div class="contact-item">
       <div class="avatar"></div>
       <div class="contact-info">
-        <span class="name">Bastien</span>
-        <span class="tag">Images message</span>
-      </div>
-    </div>
-    <div class="contact-item">
-      <div class="avatar"></div>
-      <div class="contact-info">
-        <span class="name">Camille</span>
+        <span class="name">Leghlough</span>
         <span class="tag">Images message</span>
       </div>
     </div>

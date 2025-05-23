@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MyImageBank</title>
+    <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>

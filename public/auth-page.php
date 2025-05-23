@@ -46,12 +46,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include 'templates/header.php'; ?>
 <div class="page-wrapper">
   <main class="main-content">
-    <div class="content">
+    <div class="auth-container">
+      
+      <!-- Bloc image + slogan + stats -->
       <div class="slogan-zone">
-        <h1>Partagez vos plus belles images</h1>
-        <p>Stockez, organisez et partagez vos créations en quelques clics.</p>
+        <div class="slogan-illustration-wrapper">
+          <img src="assets/img/auth-illustration.svg" alt="Illustration banque d'images" class="auth-illustration">
+        </div>
+        <div class="slogan-text">
+          <h1>Partagez vos plus belles images</h1>
+          <p>Stockez, organisez et partagez vos créations en quelques clics.</p>
+          <div class="auth-stats">
+            <div><strong>12 000+</strong><br>images partagées</div>
+            <div><strong>850+</strong><br>utilisateurs actifs</div>
+            <div><strong>100%</strong><br>gratuit & sécurisé</div>
+          </div>
+        </div>
       </div>
 
+      <!-- Formulaire auth -->
       <div class="auth-zone">
         <div class="tabs">
           <div class="tab active" data-tab="login">Connexion</div>
@@ -66,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         <?php endif; ?>
 
-        <!-- Formulaire Connexion -->
+        <!-- Form Connexion -->
         <form class="form" id="form-login" method="POST">
           <input type="hidden" name="action" value="login">
           <input type="text" placeholder="Login" name="login" required>
@@ -74,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <button class="btn-primary full" type="submit">Se connecter</button>
         </form>
 
-        <!-- Formulaire Inscription -->
+        <!-- Form Inscription -->
         <form class="form hidden" id="form-register" method="POST">
           <input type="hidden" name="action" value="register">
           <input type="text" placeholder="Nom" name="nom" required>

@@ -13,7 +13,11 @@
                         <i class="fab fa-github"></i>
                     </a>
                 </p>
-                <p><strong>MOULAI Amine</strong></p>
+                <p><strong>MOULAI Amine</strong>
+                    <a href="https://github.com/AhmedChlk" target="_blank" class="github-link" title="Voir le GitHub d'Ahmed">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </p>
             </div>
         </div>
     </main>
