@@ -1,5 +1,7 @@
 <?php
 session_start();
+// Redirige vers la page de login
+header("Location: auth-page.php");
 
 // Rediriger l'utilisateur connecté vers la galerie
 if (isset($_SESSION['user_id'])) {

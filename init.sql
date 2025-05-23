@@ -13,3 +13,32 @@ CREATE TABLE users (
     email VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Supprimer la table si elle existe
+DROP TABLE IF EXISTS images;
+
+-- Créer la table d'images
+CREATE TABLE images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    path VARCHAR(255) NOT NULL,
+    caption TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Ajouter un utilisateur de test
+INSERT INTO users (login, password, nom, prenom, email)
+VALUES (
+  'ahmed2004',
+  '$2y$10$QS7vctNo9SzpfOuwt4Nv.Ogjwby/wqWfx6Z2QZa4Zo88lgGmGu0Le',
+  'CHOULAK',
+  'Ahmed',
+  'ahmedchoulak2004@gmail.com'
+);
+
+-- Ajouter des images test
+INSERT INTO images (user_id, path, caption)
+VALUES 
+(1, 'uploads/chat1.jpg', 'Chat mignon'),
+(1, 'uploads/chat2.jpg', 'Chat curieux');
