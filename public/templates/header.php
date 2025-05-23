@@ -11,9 +11,16 @@
 <body>
     <header class="header">
         <div class="container">
-            <div class="logo">
-                <img src="assets/img/logo.png" alt="Logo">
-                <p>MyImageBank</p>
+            <a href="index.php" class="logo">
+                <div class="logo-icon">
+                    <img src="assets/img/logo.svg" alt="Logo MyImageBank">
+                </div>
+                <p class="logo-text">
+                    <span class="dark">My</span><span class="blue">Image</span><span class="dark">Bank</span>
+                </p>
+
+            </a>
+
             </div>
             <nav class="menu">
                 <a href="index.php">Accueil</a>
