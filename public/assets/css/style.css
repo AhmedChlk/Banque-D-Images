@@ -462,3 +462,23 @@ body {
   background: #4A90E2;
   color: #fff;
 }
+
+
+/*=====================
+      CONTACT Page
+=======================*/
+
+.contact-p{
+  margin: 10px 0px;
+}
+
+.about p {
+  margin: 8px 0px;
+}
+.authors-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin: 10px 0px;
+}

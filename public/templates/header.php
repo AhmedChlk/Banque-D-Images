@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MyImageBank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
@@ -16,8 +17,8 @@
             </div>
             <nav class="menu">
                 <a href="index.php">Accueil</a>
-                <a href="#">À propos</a>
-                <a href="#">Contact</a>
+                <a href="contact.php">Contact</a>
+                <a href="about.php">À propos</a>
             </nav>
         </div>
     </header>
