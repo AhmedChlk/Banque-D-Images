@@ -29,6 +29,26 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <a href="view-larger.php" class="btn-view">Voir en grand</a>
             </div>
         <?php endforeach; ?>
+                <?php foreach ($images as $image): ?>
+            <div class="image-card">
+                <div class="image-preview">
+                    <img src="<?= htmlspecialchars($image['path']) ?>" alt="image">
+                </div>
+                <p class="image-caption"><?= htmlspecialchars($image['caption']) ?></p>
+                <p class="image-date">Posté par <?= htmlspecialchars($image['login']) ?> le <?= date("d/m/Y à H:i", strtotime($image['created_at'])) ?></p>
+                <a href="view-larger.php" class="btn-view">Voir en grand</a>
+            </div>
+        <?php endforeach; ?>
+                <?php foreach ($images as $image): ?>
+            <div class="image-card">
+                <div class="image-preview">
+                    <img src="<?= htmlspecialchars($image['path']) ?>" alt="image">
+                </div>
+                <p class="image-caption"><?= htmlspecialchars($image['caption']) ?></p>
+                <p class="image-date">Posté par <?= htmlspecialchars($image['login']) ?> le <?= date("d/m/Y à H:i", strtotime($image['created_at'])) ?></p>
+                <a href="view-larger.php" class="btn-view">Voir en grand</a>
+            </div>
+        <?php endforeach; ?>
     </main>
 </div>
 <script src="assets/js/sidebar-menu-handler.js"></script>

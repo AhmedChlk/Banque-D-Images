@@ -37,6 +37,216 @@
         </span>
       </div>
     </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>  <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
   </div>
 
 </aside>

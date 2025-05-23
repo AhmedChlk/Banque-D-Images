@@ -7,7 +7,7 @@
   padding: 0;
 }
 html, body {
-  height: 100%;
+  min-height: 100vh;
 }
 body {
   display: flex;
@@ -109,6 +109,7 @@ body {
    ==================== */
 .sidebar {
   width: 260px;
+
   background: #F9F9F9;
   box-shadow: 2px 0 8px rgba(0,0,0,0.05);
   padding: 20px;
@@ -172,6 +173,7 @@ body {
 
 /* ======= CONTACTS ======= */
 .contacts-list {
+  
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -226,7 +228,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 80px - 60px);
 }
 .content {
   display: flex;
