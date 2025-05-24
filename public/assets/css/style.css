@@ -568,3 +568,15 @@ h3 {
   height: 50px;
   font-size: 17px;
 }
+
+
+
+.error-block {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}

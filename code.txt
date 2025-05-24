@@ -218,7 +218,7 @@ exit;
   padding: 0;
 }
 html, body {
-  height: 100%;
+  min-height: 100vh;
 }
 body {
   display: flex;
@@ -320,6 +320,7 @@ body {
    ==================== */
 .sidebar {
   width: 260px;
+
   background: #F9F9F9;
   box-shadow: 2px 0 8px rgba(0,0,0,0.05);
   padding: 20px;
@@ -383,42 +384,46 @@ body {
 
 /* ======= CONTACTS ======= */
 .contacts-list {
+  
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   margin-top: 20px;
+  padding-left: 4px;
 }
+
 .contact-item {
   display: flex;
   align-items: center;
   gap: 10px;
+  font-size: 14px;
 }
-.avatar {
-  width: 28px;
-  height: 28px;
-  background: #CCC;
-  border-radius: 50%;
+
+.contact-icon {
+  font-size: 22px;
+  color: #444;
 }
+
 .contact-info {
-  font-size: 12px;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
   line-height: 1.2;
 }
+
 .contact-info .name {
-  font-weight: bold;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
 }
-.contact-info .tag {
-  color: #666;
-  font-size: 11px;
-}
-.comment-btn {
-  margin-left: auto;
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-}
-.comment-btn:hover {
-  color: #4A90E2;
+
+.contact-info .icons {
+  display: flex;
+  gap: 8px;
+  color: #777;
+  font-size: 13px;
+  padding: 0 15px;
 }
 
 /* ====================
@@ -434,7 +439,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 80px - 60px);
 }
 .content {
   display: flex;
@@ -12463,30 +12467,255 @@ LıW—rR#∏ÜÑw|DqÊ:∏œâNÁUÃ°Ü!∂/°_Rˇ úxø„kˆº∑Ô[ıVÀË◊âès}KÌÀÏo¥‡€ıõÍﬂV˝,Ê≤õËÃQ}˘ee
 ----- ./public/templates/sidebar.php -----
 <aside class="sidebar">
   <div class="toolbar-row">
-    <button class="toolbar-btn" id="menu-toggle">üìÅ Menu ‚ñº</button>
+    <button class="toolbar-btn" id="menu-toggle">
+      <i class="fa-solid fa-folder"></i> Menu ‚ñº
+    </button>
     <div id="menu-options" class="menu-options hidden">
-      <a href="search.php" class="menu-link">üîç Rechercher</a>
-      <a href="upload.php" class="menu-link">‚¨ÜÔ∏è Upload</a>
-      <a href="logout.php" class="menu-link logout">üö™ D√©connexion</a>
+      <a href="search.php" class="menu-link">
+        <i class="fa-solid fa-magnifying-glass"></i> Rechercher
+      </a>
+      <a href="upload.php" class="menu-link">
+        <i class="fa-solid fa-upload"></i> Upload
+      </a>
+      <a href="logout.php" class="menu-link logout">
+        <i class="fa-solid fa-right-from-bracket"></i> D√©connexion
+      </a>
     </div>
   </div>
 
   <div class="contacts-list">
     <div class="contact-item">
-      <div class="avatar"></div>
+      <i class="fa-solid fa-user-circle contact-icon"></i>
       <div class="contact-info">
         <span class="name">Ahmed</span>
-        <span class="tag">Images message</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
       </div>
     </div>
     <div class="contact-item">
-      <div class="avatar"></div>
+      <i class="fa-solid fa-user-circle contact-icon"></i>
       <div class="contact-info">
         <span class="name">Leghlough</span>
-        <span class="tag">Images message</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div><div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>  <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Ahmed</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <i class="fa-solid fa-user-circle contact-icon"></i>
+      <div class="contact-info">
+        <span class="name">Leghlough</span>
+        <span class="icons">
+          <i class="fa-solid fa-image"></i>
+          <i class="fa-solid fa-comment-dots"></i>
+        </span>
       </div>
     </div>
   </div>
+
 </aside>
 
 ----- ./public/upload.php -----
@@ -12514,6 +12743,26 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <main class="gallery-content">
         <?php foreach ($images as $image): ?>
+            <div class="image-card">
+                <div class="image-preview">
+                    <img src="<?= htmlspecialchars($image['path']) ?>" alt="image">
+                </div>
+                <p class="image-caption"><?= htmlspecialchars($image['caption']) ?></p>
+                <p class="image-date">Post√© par <?= htmlspecialchars($image['login']) ?> le <?= date("d/m/Y √† H:i", strtotime($image['created_at'])) ?></p>
+                <a href="view-larger.php" class="btn-view">Voir en grand</a>
+            </div>
+        <?php endforeach; ?>
+                <?php foreach ($images as $image): ?>
+            <div class="image-card">
+                <div class="image-preview">
+                    <img src="<?= htmlspecialchars($image['path']) ?>" alt="image">
+                </div>
+                <p class="image-caption"><?= htmlspecialchars($image['caption']) ?></p>
+                <p class="image-date">Post√© par <?= htmlspecialchars($image['login']) ?> le <?= date("d/m/Y √† H:i", strtotime($image['created_at'])) ?></p>
+                <a href="view-larger.php" class="btn-view">Voir en grand</a>
+            </div>
+        <?php endforeach; ?>
+                <?php foreach ($images as $image): ?>
             <div class="image-card">
                 <div class="image-preview">
                     <img src="<?= htmlspecialchars($image['path']) ?>" alt="image">

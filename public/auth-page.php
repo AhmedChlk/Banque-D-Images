@@ -1,4 +1,8 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -7,7 +11,15 @@ require_once __DIR__ . '/../src/database.php';
 require_once __DIR__ . '/../src/auth.php';
 
 $pdo = getDatabaseConnection();
-$errors = [];
+
+if (isset($_SESSION['user_id'])) {
+    header("Location: gallery.php");
+    exit;
+}
+
+$loginErrors = [];
+$registerErrors = [];
+$formType = 'login'; // par défaut
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
@@ -20,7 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: gallery.php");
             exit;
         } else {
-            $errors[] = $result;
+            $loginErrors[] = $result;
+            $formType = 'login';
         }
     }
 
@@ -34,10 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $result = registerUser($pdo, $login, $password, $nom, $prenom, $email, $confirm);
         if ($result === true) {
+            $_SESSION['success_message'] = "Inscription réussie ! Vous êtes maintenant connecté.";
             header("Location: gallery.php");
             exit;
         } else {
-            $errors[] = $result;
+            $registerErrors[] = $result;
+            $formType = 'register';
         }
     }
 }
@@ -47,8 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="page-wrapper">
   <main class="main-content">
     <div class="auth-container">
-      
-      <!-- Bloc image + slogan + stats -->
+
+      <!-- Bloc illustration + slogan -->
       <div class="slogan-zone">
         <div class="slogan-illustration-wrapper">
           <img src="assets/img/auth-illustration.svg" alt="Illustration banque d'images" class="auth-illustration">
@@ -64,31 +79,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
 
-      <!-- Formulaire auth -->
+      <!-- Zone de connexion/inscription -->
       <div class="auth-zone">
         <div class="tabs">
-          <div class="tab active" data-tab="login">Connexion</div>
-          <div class="tab" data-tab="register">Inscription</div>
+          <div class="tab <?= $formType === 'login' ? 'active' : '' ?>" data-tab="login">Connexion</div>
+          <div class="tab <?= $formType === 'register' ? 'active' : '' ?>" data-tab="register">Inscription</div>
         </div>
 
-        <?php if (!empty($errors)): ?>
-          <div style="color: red; margin: 10px 0;">
-            <?php foreach ($errors as $e): ?>
-              <div>⚠️ <?= htmlspecialchars($e) ?></div>
-            <?php endforeach; ?>
-          </div>
-        <?php endif; ?>
-
         <!-- Form Connexion -->
-        <form class="form" id="form-login" method="POST">
+        <form class="form <?= $formType === 'login' ? '' : 'hidden' ?>" id="form-login" method="POST">
           <input type="hidden" name="action" value="login">
           <input type="text" placeholder="Login" name="login" required>
           <input type="password" placeholder="Mot de passe" name="password" required>
+
+          <?php if (!empty($loginErrors)): ?>
+            <div class="error-block">
+              <?php foreach ($loginErrors as $e): ?>
+                <div>⚠️ <?= htmlspecialchars($e) ?></div>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
+
           <button class="btn-primary full" type="submit">Se connecter</button>
         </form>
 
         <!-- Form Inscription -->
-        <form class="form hidden" id="form-register" method="POST">
+        <form class="form <?= $formType === 'register' ? '' : 'hidden' ?>" id="form-register" method="POST">
           <input type="hidden" name="action" value="register">
           <input type="text" placeholder="Nom" name="nom" required>
           <input type="text" placeholder="Prénom" name="prenom" required>
@@ -96,6 +112,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <input type="text" placeholder="Login" name="login" required>
           <input type="password" placeholder="Mot de passe" name="password" required>
           <input type="password" placeholder="Confirmer le mot de passe" name="confirm_password" required>
+
+          <?php if (!empty($registerErrors)): ?>
+            <div class="error-block">
+              <?php foreach ($registerErrors as $e): ?>
+                <div>⚠️ <?= htmlspecialchars($e) ?></div>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
+
           <button class="btn-primary full" type="submit">S'inscrire</button>
         </form>
       </div>
@@ -104,4 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 <?php include 'templates/footer.php'; ?>
 
+<script>
+  const initialTab = '<?= $formType ?>';
+</script>
 <script src="assets/js/form-handler.js"></script>
