@@ -1,4 +1,3 @@
 .vscode/
-# Fichiers système
 .DS_Store
 Makefile
