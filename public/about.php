@@ -14,7 +14,7 @@
                     </a>
                 </p>
                 <p><strong>MOULAI Amine</strong>
-                    <a href="https://github.com/AhmedChlk" target="_blank" class="github-link" title="Voir le GitHub d'Ahmed">
+                    <a href="https://github.com/AmineMOULAI" target="_blank" class="github-link" title="Voir le GitHub d'Amine">
                         <i class="fab fa-github"></i>
                     </a>
                 </p>

@@ -5,7 +5,7 @@
     <main class="main-content larger-image-container">
     <div class="image-card larger-image">
         <div class="image-preview larger-image">
-
+            <img src="uploads/chat1.jpg">
         </div>
     </div>
 
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div>
+    <div class="comment-form-container">
         <h3>Ajouter un commentaire</h3>
         <form class="comment-form" method="POST" action="">
             <textarea name="comment" placeholder="Ajouter un commentaire..." required></textarea>
