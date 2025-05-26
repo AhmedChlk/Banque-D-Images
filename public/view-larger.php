@@ -3,7 +3,7 @@
 <div class="page-wrapper">
     <?php include 'templates/sidebar.php'; ?>
     <main class="main-content larger-image-container">
-    <div class="image-card larger-image">
+    <div class="image-full-view">
         <div class="image-preview larger-image">
 
         </div>
@@ -12,7 +12,7 @@
     <div class="comments-section">
         <h3>Commentaires</h3>
         <div class="comment-item">
-            <div class="avatar" style="background-image: url('path_to_photo_bastien.jpg');"></div>
+            <div class="avatar" style="background-image: url('/public/uploads/chat1.jpg');"></div>
             <div class="comment-content">
                 <div class="comment-header">
                 <span class="comment-author">Bastien</span>
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div>
+    <div class="comment-add-section">
         <h3>Ajouter un commentaire</h3>
         <form class="comment-form" method="POST" action="">
             <textarea name="comment" placeholder="Ajouter un commentaire..." required></textarea>
