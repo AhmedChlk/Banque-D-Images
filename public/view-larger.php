@@ -97,7 +97,7 @@ include "templates/header.php";
                 </form>
             </div>
         <?php else: ?>
-            <p>Vous devez <a href="login.php">vous connecter</a> pour ajouter un commentaire.</p>
+            <p>Vous devez <a href="auth-page.php">vous connecter</a> pour ajouter un commentaire.</p>
         <?php endif; ?>
     </main>
 </div>
