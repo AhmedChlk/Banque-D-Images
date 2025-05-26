@@ -27,6 +27,19 @@ CREATE TABLE images (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Supprimer la table si elle existe
+DROP TABLE IF EXISTS images;
+
+-- Créer la table d'images
+CREATE TABLE images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    path VARCHAR(255) NOT NULL,
+    caption TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- Ajouter un utilisateur de test
 INSERT INTO users (login, password, nom, prenom, email)
 VALUES (
