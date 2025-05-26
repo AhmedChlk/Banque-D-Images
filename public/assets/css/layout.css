@@ -1,0 +1,22 @@
+/* ====================
+   LAYOUT GÉNÉRAL
+   ==================== */
+.page-wrapper {
+  flex: 1;
+  display: flex;
+}
+.main-content {
+  flex: 1;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 80px;
+  width: 100%;
+  max-width: 1200px;
+}

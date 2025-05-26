@@ -29,9 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = $_POST['password'] ?? '';
         $result = loginUser($pdo, $login, $password);
         if ($result === true) {
+            $_SESSION['success_message'] = "Connexion réussie ! Bienvenue 👋";
             header("Location: gallery.php");
             exit;
-        } else {
+        }
+       else {
             $loginErrors[] = $result;
             $formType = 'login';
         }
@@ -59,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <?php include 'templates/header.php'; ?>
+<link rel="stylesheet" href="assets/css/auth.css">
 <div class="page-wrapper">
   <main class="main-content">
     <div class="auth-container">

@@ -11,6 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 require_once '../src/database.php';
 $pdo = getDatabaseConnection();
 
+// Récupération des images de l'utilisateur connecté
 $stmt = $pdo->prepare("
     SELECT images.*, users.login 
     FROM images 
@@ -20,6 +21,10 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([$_SESSION['user_id']]);
 $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupération du message de succès
+$successMessage = $_SESSION['success_message'] ?? null;
+unset($_SESSION['success_message']);
 ?>
 
 <?php include 'templates/header.php'; ?>
@@ -27,11 +32,11 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php include 'templates/sidebar.php'; ?>
 
     <main class="gallery-content">
-        <?php if (!empty($_SESSION['success_message'])): ?>
+        
+        <?php if ($successMessage): ?>
             <div class="success-message">
-                <?= htmlspecialchars($_SESSION['success_message']) ?>
+                <?= htmlspecialchars($successMessage) ?>
             </div>
-            <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
 
         <?php if (empty($images)): ?>
@@ -43,13 +48,16 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img src="<?= htmlspecialchars($image['path']) ?>" alt="image">
                     </div>
                     <p class="image-caption"><?= htmlspecialchars($image['caption']) ?></p>
-                    <p class="image-date">Posté par <?= htmlspecialchars($image['login']) ?> le <?= date("d/m/Y à H:i", strtotime($image['created_at'])) ?></p>
+                    <p class="image-date">
+                        Posté par <?= htmlspecialchars($image['login']) ?> le 
+                        <?= date("d/m/Y à H:i", strtotime($image['created_at'])) ?>
+                    </p>
                     <a href="view-larger.php" class="btn-view">Voir en grand</a>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </main>
 </div>
-<script src="assets/js/sidebar-menu-handler.js"></script>
 
+<script src="assets/js/sidebar-menu-handler.js"></script>
 <?php include 'templates/footer.php'; ?>

@@ -1,0 +1,34 @@
+
+/* === PAGE À PROPOS === */
+.about-card {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-size: 16px;
+}
+
+.about-content h2 {
+  margin-bottom: 12px;
+}
+
+.about-content p {
+  margin-bottom: 8px;
+}
+
+
+.github-link {
+  color: #4A90E2;
+  margin-left: 6px;
+  font-size: 18px;
+}
+
+.github-link:hover {
+  color: #357ABD;
+}
