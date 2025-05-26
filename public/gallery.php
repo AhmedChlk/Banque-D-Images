@@ -31,13 +31,13 @@ unset($_SESSION['success_message']);
 <div class="page-wrapper">
     <?php include 'templates/sidebar.php'; ?>
 
+    <?php if ($successMessage): ?>
+    <div class="toast success-toast" id="success-toast">
+        <?= htmlspecialchars($successMessage) ?>
+    </div>
+    <?php endif; ?>
     <main class="gallery-content">
         
-        <?php if ($successMessage): ?>
-            <div class="success-message">
-                <?= htmlspecialchars($successMessage) ?>
-            </div>
-        <?php endif; ?>
 
         <?php if (empty($images)): ?>
             <p>Aucune image à afficher pour le moment.</p>
@@ -60,4 +60,5 @@ unset($_SESSION['success_message']);
 </div>
 
 <script src="assets/js/sidebar-menu-handler.js"></script>
+<script src="assets/js/toast-handler.js"></script>
 <?php include 'templates/footer.php'; ?>

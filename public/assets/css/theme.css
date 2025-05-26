@@ -112,13 +112,23 @@
   font-size: 14px;
 }
 
-.success-message {
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  padding: 14px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  font-size: 15px;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.6s ease;
+}
+
+.success-toast {
   background-color: #d4edda;
   color: #155724;
-  padding: 12px;
   border: 1px solid #c3e6cb;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  font-size: 15px;
-  text-align: center;
 }
+    
