@@ -130,4 +130,62 @@
   .comment-form button:hover {
     background-color: #0056b3;
   }
+
+  .error-block {
+    color: #b30000;
+    background-color: #fdd;
+    border: 1px solid #e00;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.success-block {
+    color: #006600;
+    background-color: #ddffdd;
+    border: 1px solid #0c0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
   
+.popup-login-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 1rem;
+    animation: slideInUp 0.4s ease-out;
+    max-width: 300px;
+    line-height: 1.4;
+}
+
+.popup-login-message a {
+    color: #007bff;
+    font-weight: 600;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+.popup-login-message a:hover {
+    color: #0056b3;
+}
+
+/* Animation */
+@keyframes slideInUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
