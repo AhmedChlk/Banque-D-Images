@@ -31,7 +31,7 @@ CREATE TABLE images (
 INSERT INTO users (login, password, nom, prenom, email)
 VALUES (
   'ahmed2004',
-  '$2y$10$QS7vctNo9SzpfOuwt4Nv.Ogjwby/wqWfx6Z2QZa4Zo88lgGmGu0Le',
+  '$2y$10$lsmIHX.7qsxPfn.7gYmf5eY4PaBBazK4JiAx9uy0sndIwQTPuDz0G',
   'CHOULAK',
   'Ahmed',
   'ahmedchoulak2004@gmail.com'
