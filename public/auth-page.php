@@ -61,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <?php include 'templates/header.php'; ?>
-<link rel="stylesheet" href="assets/css/auth.css">
 <div class="page-wrapper">
   <main class="main-content">
     <div class="auth-container">

@@ -1,0 +1,20 @@
+/* ========== MAIN CSS ========== */
+/* 1. Base reset et fondations */
+@import url("base.css");
+@import url("theme.css");
+
+/* 2. Layout général */
+@import url("layout.css");
+
+/* 3. Composants UI Et Templates */
+@import url("components/image-card.css");
+@import url("templates/header.css");
+@import url("templates/sidebar.css");
+@import url("templates/footer.css");
+
+
+/* 4. Pages spécifiques */
+@import url("pages/auth.css");
+@import url("pages/contact.css");
+@import url("pages/about.css");
+
