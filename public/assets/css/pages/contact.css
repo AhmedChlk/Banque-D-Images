@@ -1,0 +1,46 @@
+/* ======= CONTACTS ======= */
+.contacts-list {
+  
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+  padding-left: 4px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.contact-icon {
+  font-size: 22px;
+  color: #444;
+}
+
+.contact-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  line-height: 1.2;
+}
+
+.contact-info .name {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.contact-info .icons {
+  display: flex;
+  gap: 8px;
+  color: #777;
+  font-size: 13px;
+  padding: 0 15px;
+}
+
+
+

@@ -1,0 +1,86 @@
+/* ====================
+   HEADER
+   ==================== */
+.header {
+  background: #F5F5F5;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  z-index: 1000;
+  position: relative;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ======= HEADER LOGO ===== */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+.logo-icon:hover {
+  transform: scale(1.05);
+}
+.logo-icon img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.logo-text span {
+  color: #4A90E2;
+  font-weight: 700;
+}
+.logo-text .dark {
+  color: #333;
+  font-weight: 600;
+}
+
+/* ======= HEADER MENU ======= */
+.menu {
+  display: flex;
+  gap: 32px;
+  padding: 0 15px;
+}
+.menu a {
+  font-size: 16px;
+  text-decoration: none;
+  color: #333;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+.menu a:hover {
+  color: #4A90E2;
+  text-decoration: underline;
+}

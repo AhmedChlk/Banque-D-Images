@@ -1,5 +1,6 @@
 <?php include "templates/header.php"; ?>
 
+
 <div class="page-wrapper">
     <main class="main-content">
         <div class="about-card about-content">

@@ -1,0 +1,181 @@
+/* ====================
+   BOUTONS
+   ==================== */
+.btn-primary {
+  background: #4A90E2;
+  color: #fff;
+  border: none;
+  padding: 0 20px;
+  height: 48px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.btn-primary:hover {
+  background: #357ABD;
+}
+
+.logout-btn {
+  width: 100%;
+  margin: 16px 0;
+}
+
+.toolbar-btn {
+  min-width: 90px;
+  font-size: 14px;
+  padding: 8px;
+  border: 1px solid #CCC;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+}
+.toolbar-btn:hover {
+  background: #eee;
+}
+
+/* ====================
+   CLASSES UTILITAIRES
+   ==================== */
+.full {
+  width: 100%;
+}
+.hidden {
+  display: none !important;
+}
+
+/* ====================
+   FORMULAIRES
+   ==================== */
+.auth-zone {
+  width: 100%;
+  max-width: 350px;
+  padding: 24px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.auth-zone.full textarea,
+.textarea-message {
+  padding: 12px;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 8px;
+  border: 1px solid #CCC;
+  font-size: 16px;
+  resize: none;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.form input {
+  height: 48px;
+  padding: 0 12px;
+  border: 1px solid #CCC;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ====================
+   TABS
+   ==================== */
+.tabs {
+  display: flex;
+  margin-bottom: 16px;
+}
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+.tab.active {
+  border-bottom: 3px solid #4A90E2;
+  font-weight: 600;
+}
+
+/* ====================
+   MESSAGES
+   ==================== */
+.error-block {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  padding: 14px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  font-size: 15px;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.6s ease;
+}
+
+.success-toast {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.error-toast {
+  background-color: #fdecea;
+  color: #b71c1c;
+  border: 1px solid #f5c6cb;
+}
+
+
+/*===== BOUTON RETOUR GALLERIE */
+.gallery-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.08rem;
+  font-weight: 500;
+  color: #357ABD;
+  background: #f5f8ff;
+  border-radius: 24px;
+  padding: 7px 20px 7px 16px;
+  box-shadow: 0 2px 8px rgba(74,144,226,0.07);
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  margin-bottom: 18px;
+  margin-top: 8px;
+  border: 1px solid #e1e8f0;
+}
+
+.gallery-link i {
+  
+  font-size: 1.12em;
+  color: #357ABD;
+  margin-right: 2px;
+  transition: color 0.18s;
+}
+
+.gallery-link:hover, .gallery-link:focus {
+  background: #e7f1ff;
+  color: #205da5;
+  box-shadow: 0 4px 16px rgba(74,144,226,0.13);
+  border-color: #bcd6f5;
+  text-decoration: none;
+}
+
+.gallery-link:hover i,
+.gallery-link:focus i {
+  color: #205da5;
+}

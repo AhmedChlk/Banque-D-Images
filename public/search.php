@@ -17,8 +17,7 @@ include 'templates/header.php';
 
 <div class="page-wrapper">
     <?php include 'templates/sidebar.php'; ?>
-
-    <main class="main-content">
+    <main class="main-content search-page">
         <div class="search-wrapper">
             <form action="search.php" method="get" class="search-bar">
                 <input 
@@ -28,11 +27,11 @@ include 'templates/header.php';
                     placeholder="Entrez des mots-clés..." 
                     class="search-input" 
                 />
-                <button type="submit" class="btn-primary btn-view">Rechercher</button>
+                <button type="submit" class="search-btn">Rechercher</button>
             </form>
         </div>
 
-        <div class="gallery-grid">
+        <div class="image-result">
             <?php if (empty($images)): ?>
                 <p>Aucune image trouvée pour : <strong><?= htmlspecialchars($searchQuery) ?></strong></p>
             <?php else: ?>
@@ -54,3 +53,4 @@ include 'templates/header.php';
 </div>
 
 <?php include 'templates/footer.php'; ?>
+<script src="assets/js/sidebar-menu-handler.js"></script>

@@ -46,3 +46,15 @@ On récupère l'utilisateur depuis la base en fonction de son login
 Ensuite on vérifie que l'utilisateur existe dans la base et que le  mot de passe fourni par l’utilisateur correspond au mot de passe stocké dans la base 
 
 si tout est bon on demarre la session sinon on indique que la connexion n'as pas pu se faire 
+
+## logs de 27/05/2025
+
+### Problème avec apt
+Aujourd’hui j’ai rencontré un problème avec apt lors de l’installation du projet à cause de miroirs Ubuntu qui ne fonctionnaient pas correctement donc j'ai decidé de trouver une solution j’ai  modifier le script d’installation pour vérifier si les paquets sont déjà présents sur la machine avant d’essayer de les installer 
+Comme ça si l’utilisateur a déjà tous les paquets nécessaires il passe directement à la suite sans refaire l’installation inutilement
+
+Et pour cela on utilise la commande :
+
+```dpkg -l | grep -qw nom_du_paquet```
+
+En gros, dpkg -l affiche la liste de tous les paquets installés sur le système puis on redirige le flux vers grep -qw qui permet de vérifier si le nom du paquet recherché est bien présent dans cette liste Si c’est le cas ça veut dire que le paquet est déjà installé dans la machine 

@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../src/contact.php';
 include "templates/header.php";
 
+
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -9,6 +11,7 @@ $success = $_SESSION['contact_success'] ?? null;
 $error = $_SESSION['contact_error'] ?? null;
 unset($_SESSION['contact_success'], $_SESSION['contact_error']);
 ?>
+<link rel="stylesheet" href="assets/css/contact.css">
 
 <div class="page-wrapper">
   <main class="main-content">

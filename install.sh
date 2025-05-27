@@ -25,15 +25,31 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-echo -e "${YELLOW_BG_BLACK} Mise à jour des paquets... ${NC}"
-sleep 1
-apt update
+# Liste des paquets nécessaires
+PAQUETS=(php php-mysql mysql-server apache2)
+A_INSTALLER=()
 
-echo -e "${YELLOW_BG_BLACK} Installation des paquets PHP/MySQL nécessaires... ${NC}"
+echo -e "${YELLOW_BG_BLACK} Vérification des paquets requis... ${NC}"
 sleep 1
-apt install -y php php-mysql mysql-server apache2
+for pkg in "${PAQUETS[@]}"; do
+  if dpkg -l | grep -qw "$pkg"; then
+    echo -e "${GREEN_BG_BLACK}  $pkg déjà installé. ${NC}"
+  else
+    echo -e "${YELLOW_BG_BLACK}  $pkg non trouvé, il sera installé. ${NC}"
+    A_INSTALLER+=("$pkg")
+  fi
+done
 
-echo -e "${GREEN_BG_BLACK} ✅ Paquets installés avec succès. ${NC}"
+if [ ${#A_INSTALLER[@]} -gt 0 ]; then
+  echo -e "${YELLOW_BG_BLACK} Mise à jour des paquets... ${NC}"
+  apt update
+  echo -e "${YELLOW_BG_BLACK} Installation des paquets manquants : ${A_INSTALLER[*]} ${NC}"
+  apt install -y "${A_INSTALLER[@]}"
+  echo -e "${GREEN_BG_BLACK} ✅ Paquets manquants installés avec succès. ${NC}"
+else
+  echo -e "${GREEN_BG_BLACK} Tous les paquets nécessaires sont déjà installés. ${NC}"
+fi
+
 sleep 1
 
 echo -e "${YELLOW_BG_BLACK} Démarrage de MySQL... ${NC}"

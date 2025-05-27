@@ -29,9 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = $_POST['password'] ?? '';
         $result = loginUser($pdo, $login, $password);
         if ($result === true) {
+            $_SESSION['success_message'] = "Connexion réussie ! Bienvenue 👋";
             header("Location: gallery.php");
             exit;
-        } else {
+        }
+       else {
             $loginErrors[] = $result;
             $formType = 'login';
         }

@@ -1,0 +1,92 @@
+.upload-card {
+    max-width: 480px;
+    margin: 32px auto;
+    padding: 32px 32px 24px 32px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 6px 32px rgba(80,120,180,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.upload-card h2 {
+    color: #2271e3;
+    font-size: 2rem;
+    margin-bottom: 4px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align:center;
+    gap: 10px;
+}
+
+.upload-sous-titre {
+    text-align: center;
+    color: #444;
+    font-size: 1.08rem;
+    margin-bottom: 6px;
+    font-weight: 400;
+}
+
+.upload-form .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.upload-form label {
+    font-size: 1.07rem;
+    margin-bottom: 6px;
+    color: #205da5;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.upload-form input[type="file"] {
+    margin-bottom: 2px;
+    font-size: 1rem;
+    border: none;
+}
+
+.upload-form input[type="text"] {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d2dbe6;
+    background: #fafbfc;
+    font-size: 1rem;
+    margin-top: 2px;
+}
+
+.upload-form button[type="submit"] {
+    font-size: 1.12rem;
+    height: 54px;
+    margin-top: 8px;
+}
+
+.btn-retour {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #f5f8ff;
+    border-radius: 24px;
+    padding: 8px 22px;
+    color: #2271e3;
+    border: 1px solid #dbeaf8;
+    font-size: 1.08rem;
+    margin-top: 18px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+}
+.btn-retour:hover {
+    background: #e7f1ff;
+    color: #205da5;
+    border-color: #bcd6f5;
+}
+
