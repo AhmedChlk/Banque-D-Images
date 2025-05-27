@@ -40,6 +40,20 @@ CREATE TABLE images (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+
+-- Supprimer la table si elle existe 
+DROP TABLE IF EXISTS comments;
+
+CREATE TABLE comments(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    image_id INT NOT NULL,
+    author VARCHAR(100) NOT NULL DEFAULT 'Anonyme',
+    comment_text TEXT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX (image_id)
+);
+
+
 -- Ajouter un utilisateur de test
 INSERT INTO users (login, password, nom, prenom, email)
 VALUES (
@@ -55,3 +69,10 @@ INSERT INTO images (user_id, path, caption)
 VALUES 
 (1, 'uploads/chat1.jpg', 'Chat mignon'),
 (1, 'uploads/chat2.jpg', 'Chat curieux');
+
+
+INSERT INTO comments (image_id, author, comment_text, created_at) VALUES
+(1, 'Bastien', 'Magnifique !', '2025-05-13 22:20:00'),
+(1, 'Vous', 'Merci !', '2025-05-13 22:22:00'),
+(2, 'Alice', 'Superbe photo !', '2025-05-14 10:15:30'),
+(1, 'Jean', "J'adore cette image.", '2025-05-14 12:00:00');

@@ -1,5 +1,4 @@
 <?php include "templates/header.php"; ?>
-<link rel="stylesheet" href="assets/css/about.css">
 
 
 <div class="page-wrapper">

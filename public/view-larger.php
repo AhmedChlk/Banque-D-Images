@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 require_once __DIR__ . '/../src/database.php';
 $pdo = getDatabaseConnection();
@@ -9,29 +8,24 @@ if ($image_id <= 0) {
     die("Image non spécifiée.");
 }
 
+$user_id = $_SESSION['user_id'] ?? null;
 $commentError = '';
-$commentSuccess = '';
 
-$user_id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null;
-
+// Commentaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
-    if (!$user_id) {
-        $commentError = "Vous devez être connecté pour commenter.";
+    $comment_text = trim($_POST['comment']);
+    if (empty($comment_text)) {
+        $commentError = "Le commentaire ne peut pas être vide.";
     } else {
-        $comment_text = trim($_POST['comment']);
-        if (empty($comment_text)) {
-            $commentError = "Le commentaire ne peut pas être vide.";
-        } else {
-            $stmt = $pdo->prepare("INSERT INTO comments (image_id, user_id, comment_text, created_at) VALUES (?, ?, ?, NOW())");
-            $stmt->execute([$image_id, $user_id, $comment_text]);
-            
-
-            header("Location: view-larger.php?image_id=" . $image_id);
-            exit;
-        }
+        $author = $_SESSION['user_login'] ?? 'Anonyme';
+        $stmt = $pdo->prepare("INSERT INTO comments (image_id, author, comment_text, created_at) VALUES (?, ?, ?, NOW())");
+        $stmt->execute([$image_id, $author, $comment_text]);
+        header("Location: view-larger.php?image_id=" . $image_id);
+        exit;
     }
 }
 
+// Récupération de l'image
 $stmt = $pdo->prepare("SELECT * FROM images WHERE id = ?");
 $stmt->execute([$image_id]);
 $image = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -39,13 +33,8 @@ if (!$image) {
     die("Image introuvable.");
 }
 
-$stmt = $pdo->prepare("
-    SELECT c.*, COALESCE(u.prenom, 'Anonyme') AS display_name
-    FROM comments c
-    LEFT JOIN users u ON c.user_id = u.id
-    WHERE c.image_id = ?
-    ORDER BY c.created_at DESC
-");
+// Récupération des commentaires
+$stmt = $pdo->prepare("SELECT author AS display_name, comment_text, created_at FROM comments WHERE image_id = ? ORDER BY created_at DESC");
 $stmt->execute([$image_id]);
 $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -53,12 +42,17 @@ include "templates/header.php";
 ?>
 
 <div class="page-wrapper">
-    <?php include 'templates/sidebar.php'; ?>
-    <main class="main-content larger-image-container">
-        <div class="image-full-view">
-            <div class="image-preview larger-image">
-                <img src="<?= htmlspecialchars($image['path']) ?>" alt="<?= htmlspecialchars($image['caption'] ?? 'Image') ?>">
+    <?php include "templates/sidebar.php"; ?>
+
+    <main class="main-content main-view-larger">
+        <div class="larger-image-wrapper">
+            <div class="image-larger">
+                <img src="<?= htmlspecialchars($image['path']) ?>"
+                     alt="<?= htmlspecialchars($image['caption'] ?? 'Image') ?>">
             </div>
+            <p class="image-caption"><?= htmlspecialchars($image['caption']) ?></p>
+            <p class="image-date">Posté le <?= date("d/m/Y à H:i", strtotime($image['created_at'])) ?></p>
+            <a href="gallery.php" class="gallery-link">← Retour à la galerie</a>
         </div>
 
         <div class="comments-section">
@@ -66,8 +60,6 @@ include "templates/header.php";
 
             <?php if ($commentError): ?>
                 <div class="error-block"><?= htmlspecialchars($commentError) ?></div>
-            <?php elseif ($commentSuccess): ?>
-                <div class="success-block"><?= htmlspecialchars($commentSuccess) ?></div>
             <?php endif; ?>
 
             <?php if (empty($comments)): ?>
@@ -75,7 +67,7 @@ include "templates/header.php";
             <?php else: ?>
                 <?php foreach ($comments as $comment): ?>
                     <div class="comment-item">
-                        <div class="avatar" style="background-image: url('assets/img/default-avatar.png');"></div>
+                        <div class="avatar"></div>
                         <div class="comment-content">
                             <div class="comment-header">
                                 <span class="comment-author"><?= htmlspecialchars($comment['display_name']) ?></span>
@@ -86,19 +78,18 @@ include "templates/header.php";
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
-        </div>
 
-        <?php if ($user_id): ?>
-            <div class=".comment-add-section">
-                <h3>Ajouter un commentaire</h3>
-                <form class="comment-form" method="POST" action="view-larger.php?image_id=<?= $image_id ?>">
-                    <textarea name="comment" placeholder="Ajouter un commentaire..." required></textarea>
-                    <button type="submit" class="btn-primary">Envoyer</button>
-                </form>
+            <div class="comment-add-section">
+                <?php if ($user_id): ?>
+                    <form class="comment-form" method="POST" action="view-larger.php?image_id=<?= $image_id ?>">
+                        <textarea name="comment" placeholder="Ajouter un commentaire..." required></textarea>
+                        <button type="submit" class="btn-primary">Envoyer</button>
+                    </form>
+                <?php else: ?>
+                    <p class="popup-login-message">Vous devez <a href="auth-page.php">vous connecter</a> pour commenter.</p>
+                <?php endif; ?>
             </div>
-        <?php else: ?>
-            <p class="popup-login-message">Vous devez <a href="auth-page.php">vous connecter</a> pour ajouter un commentaire.</p>
-        <?php endif; ?>
+        </div>
     </main>
 </div>
 

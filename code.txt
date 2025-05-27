@@ -22,14 +22,29 @@
 │   ├── assets
 │   │   ├── css
 │   │   │   ├── base.css
-│   │   │   └── style.css
+│   │   │   ├── components
+│   │   │   │   └── image-card.css
+│   │   │   ├── layout.css
+│   │   │   ├── main.css
+│   │   │   ├── pages
+│   │   │   │   ├── about.css
+│   │   │   │   ├── auth.css
+│   │   │   │   ├── contact.css
+│   │   │   │   ├── full-view.css
+│   │   │   │   └── search.css
+│   │   │   ├── templates
+│   │   │   │   ├── footer.css
+│   │   │   │   ├── header.css
+│   │   │   │   └── sidebar.css
+│   │   │   └── theme.css
 │   │   ├── img
 │   │   │   ├── auth-illustration.svg
 │   │   │   ├── logo.png
 │   │   │   └── logo.svg
 │   │   └── js
 │   │       ├── form-handler.js
-│   │       └── sidebar-menu-handler.js
+│   │       ├── sidebar-menu-handler.js
+│   │       └── toast-handler.js
 │   ├── auth-page.php
 │   ├── contact.php
 │   ├── gallery.php
@@ -50,7 +65,7 @@
     ├── contact.php
     └── database.php
 
-13 directories, 37 files
+16 directories, 49 files
 -e 
 ===== FILE CONTENTS =====
 ----- ./explication_durant_implementation.md -----
@@ -102,6 +117,18 @@ On récupère l'utilisateur depuis la base en fonction de son login
 Ensuite on vérifie que l'utilisateur existe dans la base et que le  mot de passe fourni par l’utilisateur correspond au mot de passe stocké dans la base 
 
 si tout est bon on demarre la session sinon on indique que la connexion n'as pas pu se faire 
+
+## logs de 27/05/2025
+
+### Problème avec apt
+Aujourd’hui j’ai rencontré un problème avec apt lors de l’installation du projet à cause de miroirs Ubuntu qui ne fonctionnaient pas correctement donc j'ai decidé de trouver une solution j’ai  modifier le script d’installation pour vérifier si les paquets sont déjà présents sur la machine avant d’essayer de les installer 
+Comme ça si l’utilisateur a déjà tous les paquets nécessaires il passe directement à la suite sans refaire l’installation inutilement
+
+Et pour cela on utilise la commande :
+
+```dpkg -l | grep -qw nom_du_paquet```
+
+En gros, dpkg -l affiche la liste de tous les paquets installés sur le système puis on redirige le flux vers grep -qw qui permet de vérifier si le nom du paquet recherché est bien présent dans cette liste Si c’est le cas ça veut dire que le paquet est déjà installé dans la machine 
 ----- ./log/contact.log -----
 
 
@@ -115,52 +142,102 @@ qdegfsdg
 
 
 ----- ./public/view-larger.php -----
-<?php include "templates/header.php"; ?>
+<?php
+session_start();
+require_once __DIR__ . '/../src/database.php';
+$pdo = getDatabaseConnection();
+
+$image_id = isset($_GET['image_id']) ? (int)$_GET['image_id'] : 0;
+if ($image_id <= 0) {
+    die("Image non spécifiée.");
+}
+
+$user_id = $_SESSION['user_id'] ?? null;
+$commentError = '';
+
+// Commentaire
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
+    $comment_text = trim($_POST['comment']);
+    if (empty($comment_text)) {
+        $commentError = "Le commentaire ne peut pas être vide.";
+    } else {
+        $author = $_SESSION['user_login'] ?? 'Anonyme';
+        $stmt = $pdo->prepare("INSERT INTO comments (image_id, author, comment_text, created_at) VALUES (?, ?, ?, NOW())");
+        $stmt->execute([$image_id, $author, $comment_text]);
+        header("Location: view-larger.php?image_id=" . $image_id);
+        exit;
+    }
+}
+
+// Récupération de l'image
+$stmt = $pdo->prepare("SELECT * FROM images WHERE id = ?");
+$stmt->execute([$image_id]);
+$image = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!$image) {
+    die("Image introuvable.");
+}
+
+// Récupération des commentaires
+$stmt = $pdo->prepare("SELECT author AS display_name, comment_text, created_at FROM comments WHERE image_id = ? ORDER BY created_at DESC");
+$stmt->execute([$image_id]);
+$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+include "templates/header.php";
+?>
 
 <div class="page-wrapper">
-    <?php include 'templates/sidebar.php'; ?>
-    <main class="main-content larger-image-container">
-    <div class="image-card larger-image">
-        <div class="image-preview larger-image">
+    <?php include "templates/sidebar.php"; ?>
 
+    <main class="main-content">
+        <div class="larger-image-wrapper">
+            <div class="image-preview">
+                <img src="<?= htmlspecialchars($image['path']) ?>" alt="<?= htmlspecialchars($image['caption'] ?? 'Image') ?>">
+            </div>
+            <p class="image-caption"><?= htmlspecialchars($image['caption']) ?></p>
+            <p class="image-date">Posté le <?= date("d/m/Y à H:i", strtotime($image['created_at'])) ?></p>
+            <a href="gallery.php" class="gallery-link">← Retour à la galerie</a>
         </div>
-    </div>
 
-    <div class="comments-section">
-        <h3>Commentaires</h3>
-        <div class="comment-item">
-            <div class="avatar" style="background-image: url('path_to_photo_bastien.jpg');"></div>
-            <div class="comment-content">
-                <div class="comment-header">
-                <span class="comment-author">Bastien</span>
-                <span class="comment-date">13 mai 2025, 22h20</span>
-                </div>
-                <div class="comment-text">Magnifique !</div>
+        <div class="comments-section">
+            <h3>Commentaires</h3>
+
+            <?php if ($commentError): ?>
+                <div class="error-block"><?= htmlspecialchars($commentError) ?></div>
+            <?php endif; ?>
+
+            <?php if (empty($comments)): ?>
+                <p>Aucun commentaire pour cette image.</p>
+            <?php else: ?>
+                <?php foreach ($comments as $comment): ?>
+                    <div class="comment-item">
+                        <div class="avatar"></div>
+                        <div class="comment-content">
+                            <div class="comment-header">
+                                <span class="comment-author"><?= htmlspecialchars($comment['display_name']) ?></span>
+                                <span class="comment-date"><?= date('d M Y, H\hi', strtotime($comment['created_at'])) ?></span>
+                            </div>
+                            <div class="comment-text"><?= nl2br(htmlspecialchars($comment['comment_text'])) ?></div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <div class="comment-add-section">
+                <?php if ($user_id): ?>
+                    <form class="comment-form" method="POST" action="view-larger.php?image_id=<?= $image_id ?>">
+                        <textarea name="comment" placeholder="Ajouter un commentaire..." required></textarea>
+                        <button type="submit" class="btn-primary">Envoyer</button>
+                    </form>
+                <?php else: ?>
+                    <p class="popup-login-message">Vous devez <a href="auth-page.php">vous connecter</a> pour commenter.</p>
+                <?php endif; ?>
             </div>
         </div>
-
-        <div class="comment-item">
-            <div class="avatar" style="background-image: url('path_to_photo_bastien.jpg');"></div>
-            <div class="comment-content">
-                <div class="comment-header">
-                <span class="comment-author">Vous</span>
-                <span class="comment-date">13 mai 2025, 22h22</span>
-                </div>
-                <div class="comment-text">Merci !</div>
-            </div>
-        </div>
-    </div>
-    <div>
-        <h3>Ajouter un commentaire</h3>
-        <form class="comment-form" method="POST" action="">
-            <textarea name="comment" placeholder="Ajouter un commentaire..." required></textarea>
-            <button type="submit" class="btn-primary">Envoyer</button>
-        </form>
-    </div>    
     </main>
 </div>
+
 <script src="assets/js/sidebar-menu-handler.js"></script>
-<?php include "templates/footer.php" ?>
+<?php include "templates/footer.php"; ?>
 
 ----- ./public/logout.php -----
 <?php
@@ -173,24 +250,57 @@ header("Location: auth-page.php");
 exit;
 
 ----- ./public/search.php -----
-<?php include 'templates/header.php'; ?>
+<?php
+session_start();
+require_once __DIR__ . '/../src/database.php';
+$pdo = getDatabaseConnection();
+
+$searchQuery = isset($_GET['q']) ? trim($_GET['q']) : '';
+
+$images = [];
+if ($searchQuery !== '') {
+    $stmt = $pdo->prepare("SELECT * FROM images WHERE caption LIKE ? ORDER BY created_at DESC LIMIT 50");
+    $stmt->execute(['%' . $searchQuery . '%']);
+    $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+include 'templates/header.php';
+?>
 
 <div class="page-wrapper">
     <?php include 'templates/sidebar.php'; ?>
 
-    <main class="main-content">
-        <form action="search.php" method="get" class="search-bar">
-            <input type="text" name="q" placeholder="Entrez des mots-clés..." class="search-input"/>
-            <button type="submit" class="search-btn">Rechercher</button>
-        </form>
+    <main class="main-content search-page">
+        <div class="search-wrapper">
+            <form action="search.php" method="get" class="search-bar">
+                <input 
+                    type="text" 
+                    name="q" 
+                    value="<?= htmlspecialchars($searchQuery) ?>" 
+                    placeholder="Entrez des mots-clés..." 
+                    class="search-input" 
+                />
+                <button type="submit" class="search-btn">Rechercher</button>
+            </form>
+        </div>
 
         <div class="image-result">
-            <div class="image-card">
-                <div class="image-preview"></div>
-                <p class="image-caption">“Chatons mignons”</p>
-                <a href="View-larger.php?id=123" class="btn-primary btn-view">Voir en grand</a><br />
-                <a href="#" class="gallery-link">Galerie du propriétaire</a>
-            </div>
+            <?php if (empty($images)): ?>
+                <p>Aucune image trouvée pour : <strong><?= htmlspecialchars($searchQuery) ?></strong></p>
+            <?php else: ?>
+                <?php foreach ($images as $image): ?>
+                    <div class="image-card">
+                        <div class="image-preview">
+                            <img src="<?= htmlspecialchars($image['path']) ?>" alt="<?= htmlspecialchars($image['caption'] ?? 'Image') ?>">
+                        </div>
+                        <div class="image-details">
+                            <p class="image-caption">“<?= htmlspecialchars($image['caption']) ?>”</p>
+                            <a href="view-larger.php?image_id=<?= (int)$image['id'] ?>" class="btn-view">Voir en grand</a>
+                            <a href="gallery.php?user_id=<?= (int)$image['user_id'] ?>" class="gallery-link">Galerie du propriétaire</a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </main>
 </div>
@@ -199,6 +309,7 @@ exit;
 
 ----- ./public/about.php -----
 <?php include "templates/header.php"; ?>
+
 
 <div class="page-wrapper">
     <main class="main-content">
@@ -225,8 +336,701 @@ exit;
 
 <?php include "templates/footer.php"; ?>
 
------ ./public/assets/css/style.css -----
+----- ./public/assets/css/theme.css -----
+/* ====================
+   BOUTONS
+   ==================== */
+.btn-primary {
+  background: #4A90E2;
+  color: #fff;
+  border: none;
+  padding: 0 20px;
+  height: 48px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.btn-primary:hover {
+  background: #357ABD;
+}
 
+.logout-btn {
+  width: 100%;
+  margin: 16px 0;
+}
+
+.toolbar-btn {
+  min-width: 90px;
+  font-size: 14px;
+  padding: 8px;
+  border: 1px solid #CCC;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+}
+.toolbar-btn:hover {
+  background: #eee;
+}
+
+/* ====================
+   CLASSES UTILITAIRES
+   ==================== */
+.full {
+  width: 100%;
+}
+.hidden {
+  display: none !important;
+}
+
+/* ====================
+   FORMULAIRES
+   ==================== */
+.auth-zone {
+  width: 100%;
+  max-width: 350px;
+  padding: 24px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.auth-zone.full textarea,
+.textarea-message {
+  padding: 12px;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 8px;
+  border: 1px solid #CCC;
+  font-size: 16px;
+  resize: none;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.form input {
+  height: 48px;
+  padding: 0 12px;
+  border: 1px solid #CCC;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ====================
+   TABS
+   ==================== */
+.tabs {
+  display: flex;
+  margin-bottom: 16px;
+}
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+.tab.active {
+  border-bottom: 3px solid #4A90E2;
+  font-weight: 600;
+}
+
+/* ====================
+   MESSAGES
+   ==================== */
+.error-block {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  padding: 14px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  font-size: 15px;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.6s ease;
+}
+
+.success-toast {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+    
+----- ./public/assets/css/pages/auth.css -----
+/* === AUTH PAGE FIXED ALIGNMENT === */
+/* ================ AUTH PAGE MAIN =================== */
+.auth-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 40px;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 20px;
+  flex-wrap: wrap;
+}
+
+/* Bloc illustration + texte slogan */
+.slogan-zone {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1.3;
+  gap: 20px;
+  min-width: 450px;
+}
+
+.slogan-illustration-wrapper {
+  flex-shrink: 0;
+}
+.auth-illustration {
+  width: 220px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Texte slogan agrandi */
+.slogan-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slogan-text h1 {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+.slogan-text p {
+  font-size: 17px;
+  margin-bottom: 18px;
+  color: #444;
+}
+
+.auth-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.auth-stats div {
+  background: #F9F9F9;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  text-align: center;
+  min-width: 100px;
+}
+
+/* Agrandissement du formulaire */
+.auth-zone {
+  flex: 1;
+  max-width: 420px;
+  padding: 28px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.form input {
+  height: 50px;
+  font-size: 17px;
+}
+
+.btn-primary {
+  height: 50px;
+  font-size: 17px;
+}
+----- ./public/assets/css/pages/full-view.css -----
+/* ==========================
+   PAGE : VUE EN GRAND
+=========================== */
+
+.larger-image-wrapper {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  max-width: 800px;
+  margin: 40px auto 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.larger-image-wrapper .image-preview {
+  width: 100%;
+  max-height: 500px;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.larger-image-wrapper .image-preview img {
+  width: auto;
+  max-width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.larger-image-wrapper .image-caption {
+  font-style: italic;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.larger-image-wrapper .image-date {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.larger-image-wrapper .gallery-link {
+  font-size: 14px;
+  color: #4A90E2;
+  text-decoration: underline;
+}
+.larger-image-wrapper .gallery-link:hover {
+  color: #357ABD;
+}
+
+
+----- ./public/assets/css/pages/contact.css -----
+/* ======= CONTACTS ======= */
+.contacts-list {
+  
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+  padding-left: 4px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.contact-icon {
+  font-size: 22px;
+  color: #444;
+}
+
+.contact-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  line-height: 1.2;
+}
+
+.contact-info .name {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.contact-info .icons {
+  display: flex;
+  gap: 8px;
+  color: #777;
+  font-size: 13px;
+  padding: 0 15px;
+}
+
+
+
+
+----- ./public/assets/css/pages/about.css -----
+
+/* === PAGE À PROPOS === */
+.about-card {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-size: 16px;
+}
+
+.about-content h2 {
+  margin-bottom: 12px;
+}
+
+.about-content p {
+  margin-bottom: 8px;
+}
+
+
+.github-link {
+  color: #4A90E2;
+  margin-left: 6px;
+  font-size: 18px;
+}
+
+.github-link:hover {
+  color: #357ABD;
+}
+----- ./public/assets/css/pages/search.css -----
+/* === BARRE DE RECHERCHE === */
+.main-content.search-page{
+    display: block;
+    padding: 20px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 20px auto;
+    padding: 0 24px;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .search-input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .search-btn {
+    padding: 12px 20px;
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .search-btn:hover {
+    background-color: #357ABD;
+  }
+  
+  /* === RÉSULTATS D'IMAGES === */
+  .image-result {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colonnes de largeur égale */
+    gap: 24px;
+    padding: 24px;
+}
+  
+  
+  
+  
+----- ./public/assets/css/layout.css -----
+/* ====================
+   LAYOUT GÉNÉRAL
+   ==================== */
+.page-wrapper {
+  flex: 1;
+  display: flex;
+}
+.main-content {
+  flex: 1;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 80px;
+  width: 100%;
+  max-width: 1200px;
+}
+----- ./public/assets/css/components/image-card.css -----
+
+/* ====================
+   IMAGE CARD
+   ==================== */
+.gallery-content {
+  display: flex;
+  gap: 20px 25px;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+  .image-card {
+    width: 300px;
+    height: 360px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    max-width: 280px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+.image-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+.image-preview {
+  width: 100%;
+  height: 160px;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.image-caption {
+  font-style: italic;
+  font-size: 15px;
+  margin: 8px 0;
+  color: #333;
+  text-align: center;
+  padding: 10px 16px 4px;
+}
+.image-date {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  padding: 0 12px 12px;
+}
+.image-card .btn-view {
+  background: #4A90E2;
+  color: white;
+  font-size: 14px;
+  padding: 10px 0;
+  width: 80%;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s;
+  display: block;
+  margin: 10px auto;
+  text-align: center;
+}
+.image-card .btn-view:hover {
+  background: #357ABD;
+}
+
+.gallery-link {
+    font-size: 14px;
+    color: #4A90E2;
+    text-decoration: underline;
+  }
+  
+  .gallery-link:hover {
+    color: #357ABD;
+  }
+
+/* ====================
+   COMMENTAIRES
+   ==================== */
+h3 {
+  font-weight: bold;
+  padding: 15px 5px;
+}
+.comment-content {
+  background-color: #F5F5F5;
+  border-radius: 10px;
+  flex: 1;
+}
+.comment-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  gap: 12px;
+}
+.comment-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 15px 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.comment-text {
+  padding: 15px;
+}
+.comment-form {
+  display: flex;
+  gap: 12px;
+}
+.comment-form textarea {
+  width: 80%;
+  height: 80px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
+  resize: none;
+  margin-bottom: 12px;
+  font-family: sans-serif;
+}
+----- ./public/assets/css/base.css -----
+/* ====================
+   GLOBAL RESET + BASE
+   ==================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  background: #fff;
+}
+
+----- ./public/assets/css/templates/footer.css -----
+/* ====================
+   FOOTER
+   ==================== */
+.footer {
+  background: #F5F5F5;
+  padding: 20px 0;
+  text-align: center;
+  height: 60px;
+}
+
+.footer .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.footer a {
+  margin: 0 8px;
+  color: #4A90E2;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+----- ./public/assets/css/templates/sidebar.css -----
+
+/* ====================
+   SIDEBAR
+   ==================== */
+.sidebar {
+  width: 260px;
+
+  background: #F9F9F9;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+  padding: 20px;
+}
+
+.toolbar-row {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.toolbar-btn {
+  min-width: 90px;
+  font-size: 14px;
+  padding: 8px;
+  border: 1px solid #CCC;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+}
+.toolbar-btn:hover {
+  background: #eee;
+}
+.logout-btn {
+  width: 100%;
+  margin: 16px 0;
+}
+
+/* ======= SIDEBAR MENU ======= */
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.menu-options.hidden {
+  display: none;
+}
+
+.menu-link {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-align: center;
+  width: 100%;
+  transition: background-color 0.2s, color 0.2s;
+}
+.menu-link:hover {
+  background-color: #e0e0e0;
+  color: #4A90E2;
+}
+.menu-link.logout:hover {
+  color: #D32F2F;
+}
+
+
+----- ./public/assets/css/templates/header.css -----
 /* ====================
    HEADER
    ==================== */
@@ -314,513 +1118,29 @@ exit;
   text-decoration: underline;
 }
 
-/* ====================
-   SIDEBAR
-   ==================== */
-.sidebar {
-  width: 260px;
+----- ./public/assets/css/main.css -----
+/* ========== MAIN CSS ========== */
+/* 1. Base reset et fondations */
+@import url("base.css");
+@import url("theme.css");
 
-  background: #F9F9F9;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.05);
-  padding: 20px;
-}
+/* 2. Layout général */
+@import url("layout.css");
 
-.toolbar-row {
-  display: flex;
-  gap: 8px;
-  flex-direction: column;
-  margin-bottom: 16px;
-}
-
-.toolbar-btn {
-  min-width: 90px;
-  font-size: 14px;
-  padding: 8px;
-  border: 1px solid #CCC;
-  border-radius: 6px;
-  background: #fff;
-  cursor: pointer;
-  text-align: center;
-}
-.toolbar-btn:hover {
-  background: #eee;
-}
-.logout-btn {
-  width: 100%;
-  margin: 16px 0;
-}
-
-/* ======= SIDEBAR MENU ======= */
-.menu-options {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  margin-top: 10px;
-}
-
-.menu-options.hidden {
-  display: none;
-}
-
-.menu-link {
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-  padding: 6px 12px;
-  border-radius: 4px;
-  text-align: center;
-  width: 100%;
-  transition: background-color 0.2s, color 0.2s;
-}
-.menu-link:hover {
-  background-color: #e0e0e0;
-  color: #4A90E2;
-}
-.menu-link.logout:hover {
-  color: #D32F2F;
-}
-
-/* ======= CONTACTS ======= */
-.contacts-list {
-  
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 20px;
-  padding-left: 4px;
-}
-
-.contact-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-}
-
-.contact-icon {
-  font-size: 22px;
-  color: #444;
-}
-
-.contact-info {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  gap: 4px;
-  line-height: 1.2;
-}
-
-.contact-info .name {
-  font-weight: 600;
-  color: #333;
-  font-size: 14px;
-}
-
-.contact-info .icons {
-  display: flex;
-  gap: 8px;
-  color: #777;
-  font-size: 13px;
-  padding: 0 15px;
-}
-
-/* ====================
-   LAYOUT
-   ==================== */
-.page-wrapper {
-  flex: 1;
-  display: flex;
-}
-.main-content {
-  flex: 1;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 80px;
-  width: 100%;
-  max-width: 1200px;
-}
-
-/* ====================
-   IMAGE CARD
-   ==================== */
-.gallery-content {
-  display: flex;
-  gap: 20px 25px;
-  padding: 20px;
-  width: 100%;
-  max-width: 1200px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.image-card {
-  width: 240px;
-  height: 360px;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.image-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-}
-.image-preview {
-  width: 100%;
-  height: 180px;
-  background-color: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-.image-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.image-caption {
-  font-style: italic;
-  font-size: 15px;
-  color: #333;
-  text-align: center;
-  padding: 10px 16px 4px;
-}
-.image-date {
-  font-size: 13px;
-  color: #666;
-  text-align: center;
-  padding: 0 12px 12px;
-}
-.image-card .btn-view {
-  background: #4A90E2;
-  color: white;
-  font-size: 14px;
-  padding: 10px 0;
-  width: 80%;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background 0.3s;
-  display: block;
-  margin: 10px auto;
-  text-align: center;
-}
-.image-card .btn-view:hover {
-  background: #357ABD;
-}
-
-/* ====================
-   COMMENTAIRES
-   ==================== */
-h3 {
-  font-weight: bold;
-  padding: 15px 5px;
-}
-.comment-content {
-  background-color: #F5F5F5;
-  border-radius: 10px;
-  flex: 1;
-}
-.comment-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 30px;
-  gap: 12px;
-}
-.comment-header {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding: 15px 10px;
-  font-size: 14px;
-  font-weight: 500;
-}
-.comment-text {
-  padding: 15px;
-}
-.comment-form {
-  display: flex;
-  gap: 12px;
-}
-.comment-form textarea {
-  width: 80%;
-  height: 80px;
-  border: 1px solid #000;
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 15px;
-  resize: none;
-  margin-bottom: 12px;
-  font-family: sans-serif;
-}
-
-/* ====================
-   FOOTER
-   ==================== */
-.footer {
-  background: #F5F5F5;
-  padding: 20px 0;
-  text-align: center;
-  height: 60px;
-}
-.footer .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-.footer a {
-  margin: 0 8px;
-  color: #4A90E2;
-  text-decoration: none;
-}
-.footer a:hover {
-  text-decoration: underline;
-}
-
-/* ====================
-   FORMULAIRES (AUTH + CONTACT)
-   ==================== */
-.auth-zone {
-  width: 100%;
-  max-width: 350px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 24px;
-  border-radius: 8px;
-  background: #fff;
-}
-
-.auth-zone.full textarea,
-.textarea-message {
-  padding: 12px;
-  font-family: 'Poppins', sans-serif;
-  border-radius: 8px;
-  border: 1px solid #CCC;
-  font-size: 16px;
-  resize: none;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.form input {
-  height: 48px;
-  padding: 0 12px;
-  border: 1px solid #CCC;
-  border-radius: 8px;
-  font-size: 16px;
-  font-family: 'Poppins', sans-serif;
-}
-
-.tabs {
-  display: flex;
-  margin-bottom: 16px;
-}
-.tab {
-  flex: 1;
-  text-align: center;
-  padding: 8px 0;
-  font-size: 16px;
-  cursor: pointer;
-}
-.tab.active {
-  border-bottom: 3px solid #4A90E2;
-  font-weight: 600;
-}
-
-.btn-primary {
-  background: #4A90E2;
-  color: #fff;
-  border: none;
-  padding: 0 20px;
-  height: 48px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-.btn-primary:hover {
-  background: #357ABD;
-}
-.full {
-  width: 100%;
-}
-
-.hidden {
-    display: none !important;
-  }
+/* 3. Composants UI Et Templates */
+@import url("components/image-card.css");
+@import url("templates/header.css");
+@import url("templates/sidebar.css");
+@import url("templates/footer.css");
 
 
-/* === PAGE À PROPOS === */
-.about-card {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  font-size: 16px;
-}
+/* 4. Pages spécifiques */
+@import url("pages/auth.css");
+@import url("pages/contact.css");
+@import url("pages/about.css");
+@import url("pages/search.css");
+@import url("pages/full-view.css");
 
-.about-content h2 {
-  margin-bottom: 12px;
-}
-
-.about-content p {
-  margin-bottom: 8px;
-}
-
-
-.github-link {
-  color: #4A90E2;
-  margin-left: 6px;
-  font-size: 18px;
-}
-
-.github-link:hover {
-  color: #357ABD;
-}
-
-/* === AUTH PAGE FIXED ALIGNMENT === */
-/* ================ AUTH PAGE MAIN =================== */
-.auth-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  gap: 40px; /* réduit le gap */
-  max-width: 1200px;
-  width: 100%;
-  padding: 0 20px;
-  flex-wrap: wrap;
-}
-
-/* Bloc illustration + texte slogan */
-.slogan-zone {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex: 1.3;
-  gap: 20px;
-  min-width: 450px;
-}
-
-.slogan-illustration-wrapper {
-  flex-shrink: 0;
-}
-.auth-illustration {
-  width: 220px;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-/* Texte slogan agrandi */
-.slogan-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.slogan-text h1 {
-  font-size: 30px;
-  margin-bottom: 10px;
-}
-.slogan-text p {
-  font-size: 17px;
-  margin-bottom: 18px;
-  color: #444;
-}
-.auth-stats {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.auth-stats div {
-  background: #F9F9F9;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-  text-align: center;
-  min-width: 100px;
-}
-
-/* Agrandissement du formulaire */
-.auth-zone {
-  flex: 1;
-  max-width: 420px; /* élargi */
-  padding: 28px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  background: #fff;
-}
-.form input {
-  height: 50px;
-  font-size: 17px;
-}
-.btn-primary {
-  height: 50px;
-  font-size: 17px;
-}
-
-.error-block {
-  background-color: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeeba;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-.success-message {
-  background-color: #d4edda;
-  color: #155724;
-  padding: 12px;
-  border: 1px solid #c3e6cb;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  font-size: 15px;
-  text-align: center;
-}
-
------ ./public/assets/css/base.css -----
-/* ====================
-   GLOBAL RESET + BASE
-   ==================== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  min-height: 100vh;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  font-family: 'Poppins', sans-serif;
-  color: #333;
-  background: #fff;
-}
 
 ----- ./public/assets/js/sidebar-menu-handler.js -----
 document.addEventListener("DOMContentLoaded", () => {
@@ -831,6 +1151,18 @@ document.addEventListener("DOMContentLoaded", () => {
     menuToggle.addEventListener("click", () => {
       menuOptions.classList.toggle("hidden");
     });
+  }
+});
+
+----- ./public/assets/js/toast-handler.js -----
+document.addEventListener("DOMContentLoaded", () => {
+  const toast = document.getElementById("success-toast");
+  if (toast) {
+    setTimeout(() => {
+      toast.style.opacity = "0";
+      toast.style.transform = "translateY(-20px)";
+      setTimeout(() => toast.remove(), 500);
+    }, 3000); // 3 secondes avant disparition
   }
 });
 
@@ -5152,6 +5484,8 @@ n�ÿ1o�;K� p<r�o�:��ұa��1磑�uI�'a�[HTO�x�Mn��F]�ˉ��i;7����)�k�/�g:�
 require_once __DIR__ . '/../src/contact.php';
 include "templates/header.php";
 
+
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -5159,6 +5493,7 @@ $success = $_SESSION['contact_success'] ?? null;
 $error = $_SESSION['contact_error'] ?? null;
 unset($_SESSION['contact_success'], $_SESSION['contact_error']);
 ?>
+<link rel="stylesheet" href="assets/css/contact.css">
 
 <div class="page-wrapper">
   <main class="main-content">
@@ -5236,9 +5571,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = $_POST['password'] ?? '';
         $result = loginUser($pdo, $login, $password);
         if ($result === true) {
+            $_SESSION['success_message'] = "Connexion réussie ! Bienvenue 👋";
             header("Location: gallery.php");
             exit;
-        } else {
+        }
+       else {
             $loginErrors[] = $result;
             $formType = 'login';
         }
@@ -12529,8 +12866,11 @@ L�W�rR#���w|Dq�:�ωN�U̡�!�/�_R� �x��k����[�V��׉�s}K���o�������V�,沛��Q}�ee
     <title>MyImageBank</title>
     <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    
+
+    
 </head>
 
 <body>
@@ -12833,6 +13173,7 @@ if (!isset($_SESSION['user_id'])) {
 require_once '../src/database.php';
 $pdo = getDatabaseConnection();
 
+// Récupération des images de l'utilisateur connecté
 $stmt = $pdo->prepare("
     SELECT images.*, users.login 
     FROM images 
@@ -12842,20 +13183,23 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([$_SESSION['user_id']]);
 $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupération du message de succès
+$successMessage = $_SESSION['success_message'] ?? null;
+unset($_SESSION['success_message']);
 ?>
 
 <?php include 'templates/header.php'; ?>
 <div class="page-wrapper">
     <?php include 'templates/sidebar.php'; ?>
 
+    <?php if ($successMessage): ?>
+    <div class="toast success-toast" id="success-toast">
+        <?= htmlspecialchars($successMessage) ?>
+    </div>
+    <?php endif; ?>
+    
     <main class="gallery-content">
-        <?php if (!empty($_SESSION['success_message'])): ?>
-            <div class="success-message">
-                <?= htmlspecialchars($_SESSION['success_message']) ?>
-            </div>
-            <?php unset($_SESSION['success_message']); ?>
-        <?php endif; ?>
-
         <?php if (empty($images)): ?>
             <p>Aucune image à afficher pour le moment.</p>
         <?php else: ?>
@@ -12865,15 +13209,20 @@ $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img src="<?= htmlspecialchars($image['path']) ?>" alt="image">
                     </div>
                     <p class="image-caption"><?= htmlspecialchars($image['caption']) ?></p>
-                    <p class="image-date">Posté par <?= htmlspecialchars($image['login']) ?> le <?= date("d/m/Y à H:i", strtotime($image['created_at'])) ?></p>
-                    <a href="view-larger.php" class="btn-view">Voir en grand</a>
+                    <p class="image-date">
+                        Posté par <?= htmlspecialchars($image['login']) ?> le 
+                        <?= date("d/m/Y à H:i", strtotime($image['created_at'])) ?>
+                    </p>
+                    <!-- ✅ Correction ici : passage de l'ID de l'image -->
+                    <a href="view-larger.php?image_id=<?= $image['id'] ?>" class="btn-view">Voir en grand</a>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </main>
 </div>
-<script src="assets/js/sidebar-menu-handler.js"></script>
 
+<script src="assets/js/sidebar-menu-handler.js"></script>
+<script src="assets/js/toast-handler.js"></script>
 <?php include 'templates/footer.php'; ?>
 
 ----- ./Makefile -----
@@ -12942,15 +13291,31 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-echo -e "${YELLOW_BG_BLACK} Mise à jour des paquets... ${NC}"
-sleep 1
-apt update
+# Liste des paquets nécessaires
+PAQUETS=(php php-mysql mysql-server apache2)
+A_INSTALLER=()
 
-echo -e "${YELLOW_BG_BLACK} Installation des paquets PHP/MySQL nécessaires... ${NC}"
+echo -e "${YELLOW_BG_BLACK} Vérification des paquets requis... ${NC}"
 sleep 1
-apt install -y php php-mysql mysql-server apache2
+for pkg in "${PAQUETS[@]}"; do
+  if dpkg -l | grep -qw "$pkg"; then
+    echo -e "${GREEN_BG_BLACK}  $pkg déjà installé. ${NC}"
+  else
+    echo -e "${YELLOW_BG_BLACK}  $pkg non trouvé, il sera installé. ${NC}"
+    A_INSTALLER+=("$pkg")
+  fi
+done
 
-echo -e "${GREEN_BG_BLACK} ✅ Paquets installés avec succès. ${NC}"
+if [ ${#A_INSTALLER[@]} -gt 0 ]; then
+  echo -e "${YELLOW_BG_BLACK} Mise à jour des paquets... ${NC}"
+  apt update
+  echo -e "${YELLOW_BG_BLACK} Installation des paquets manquants : ${A_INSTALLER[*]} ${NC}"
+  apt install -y "${A_INSTALLER[@]}"
+  echo -e "${GREEN_BG_BLACK} ✅ Paquets manquants installés avec succès. ${NC}"
+else
+  echo -e "${GREEN_BG_BLACK} Tous les paquets nécessaires sont déjà installés. ${NC}"
+fi
+
 sleep 1
 
 echo -e "${YELLOW_BG_BLACK} Démarrage de MySQL... ${NC}"
@@ -13019,11 +13384,38 @@ CREATE TABLE images (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Supprimer la table si elle existe
+DROP TABLE IF EXISTS images;
+
+-- Créer la table d'images
+CREATE TABLE images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    path VARCHAR(255) NOT NULL,
+    caption TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
+-- Supprimer la table si elle existe 
+DROP TABLE IF EXISTS comments;
+
+CREATE TABLE comments(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    image_id INT NOT NULL,
+    author VARCHAR(100) NOT NULL DEFAULT 'Anonyme',
+    comment_text TEXT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX (image_id)
+);
+
+
 -- Ajouter un utilisateur de test
 INSERT INTO users (login, password, nom, prenom, email)
 VALUES (
   'ahmed2004',
-  '$2y$10$QS7vctNo9SzpfOuwt4Nv.Ogjwby/wqWfx6Z2QZa4Zo88lgGmGu0Le',
+  '$2y$10$lsmIHX.7qsxPfn.7gYmf5eY4PaBBazK4JiAx9uy0sndIwQTPuDz0G',
   'CHOULAK',
   'Ahmed',
   'ahmedchoulak2004@gmail.com'
@@ -13035,6 +13427,12 @@ VALUES
 (1, 'uploads/chat1.jpg', 'Chat mignon'),
 (1, 'uploads/chat2.jpg', 'Chat curieux');
 
+
+INSERT INTO comments (image_id, author, comment_text, created_at) VALUES
+(1, 'Bastien', 'Magnifique !', '2025-05-13 22:20:00'),
+(1, 'Vous', 'Merci !', '2025-05-13 22:22:00'),
+(2, 'Alice', 'Superbe photo !', '2025-05-14 10:15:30'),
+(1, 'Jean', "J'adore cette image.", '2025-05-14 12:00:00');
 ----- ./src/database.php -----
 <?php
 function getDatabaseConnection() {

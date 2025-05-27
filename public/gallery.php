@@ -36,9 +36,8 @@ unset($_SESSION['success_message']);
         <?= htmlspecialchars($successMessage) ?>
     </div>
     <?php endif; ?>
+    
     <main class="gallery-content">
-        
-
         <?php if (empty($images)): ?>
             <p>Aucune image à afficher pour le moment.</p>
         <?php else: ?>
@@ -52,7 +51,8 @@ unset($_SESSION['success_message']);
                         Posté par <?= htmlspecialchars($image['login']) ?> le 
                         <?= date("d/m/Y à H:i", strtotime($image['created_at'])) ?>
                     </p>
-                    <a href="view-larger.php" class="btn-view">Voir en grand</a>
+                    <!-- ✅ Correction ici : passage de l'ID de l'image -->
+                    <a href="view-larger.php?image_id=<?= $image['id'] ?>" class="btn-view">Voir en grand</a>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
