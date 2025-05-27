@@ -7,4 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
       menuOptions.classList.toggle("hidden");
     });
   }
+
+  const addContactBtn = document.getElementById("add-contact-btn");
+  const addContactForm = document.getElementById("add-contact-form");
+  if (addContactBtn && addContactForm) {
+    addContactBtn.addEventListener("click", () => {
+      addContactForm.classList.toggle("hidden");
+    });
+  }
 });
