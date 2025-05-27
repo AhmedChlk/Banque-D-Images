@@ -100,7 +100,7 @@
 .comment-text {
     font-size: 1.02rem;
     line-height: 1.4;
-    padding-bottom: 4px;
+    
 }
 
 /* Section formulaire */
@@ -151,3 +151,146 @@
 .comment-form button:hover {
     background-color: #357ABD;
 }
+
+.gallery-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.08rem;
+  font-weight: 500;
+  color: #357ABD;
+  background: #f5f8ff;
+  border-radius: 24px;
+  padding: 7px 20px 7px 16px;
+  box-shadow: 0 2px 8px rgba(74,144,226,0.07);
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  margin-bottom: 18px;
+  margin-top: 8px;
+  border: 1px solid #e1e8f0;
+}
+
+.gallery-link i {
+  
+  font-size: 1.12em;
+  color: #357ABD;
+  margin-right: 2px;
+  transition: color 0.18s;
+}
+
+.gallery-link:hover, .gallery-link:focus {
+  background: #e7f1ff;
+  color: #205da5;
+  box-shadow: 0 4px 16px rgba(74,144,226,0.13);
+  border-color: #bcd6f5;
+  text-decoration: none;
+}
+
+.gallery-link:hover i,
+.gallery-link:focus i {
+  color: #205da5;
+}
+
+
+
+.comment-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 18px;
+    align-items: flex-start;
+}
+
+/* Avatar */
+.avatar {
+    width: 40px;
+    height: 40px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    flex-shrink: 0;
+    background-color: #ddd;
+}
+
+/* La bulle autour du commentaire */
+.comment-bubble {
+    background: #f4f4f4;
+    border-radius: 14px;
+    padding: 12px 18px 10px 18px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+/* Auteur + date sur une ligne */
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.04rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 3px;
+}
+
+/* Nom auteur + date */
+.comment-author {
+    font-weight: 700;
+    color: #222;
+}
+.comment-date {
+    font-size: 0.93em;
+    font-weight: 400;
+    color: #888;
+}
+
+/* Texte du commentaire */
+.comment-text {
+    font-size: 1.06rem;
+    line-height: 1.4;
+    color: #222;
+    margin-top: 2px;
+    word-break: break-word;
+}
+
+
+.popup-login-message {
+    margin: 32px auto 0 auto;
+    max-width: 480px;
+    background: #f7faff;
+    color: #185b9a;
+    border: 1px solid #e3eaf3;
+    border-radius: 10px;
+    padding: 18px 22px 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 1.10rem;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(50,80,150,0.06);
+}
+
+.popup-login-message i {
+    color: #357ABD;
+    font-size: 1.38em;
+    margin-right: 4px;
+    flex-shrink: 0;
+}
+
+.popup-login-message a {
+    color: #205da5;
+    font-weight: 700;
+    text-decoration: underline;
+    margin-left: 4px;
+    transition: color 0.18s;
+}
+
+.popup-login-message a:hover,
+.popup-login-message a:focus {
+    color: #4A90E2;
+    text-decoration: underline;
+}
+

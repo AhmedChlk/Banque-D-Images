@@ -46,13 +46,16 @@ include "templates/header.php";
 
     <main class="main-content main-view-larger">
         <div class="larger-image-wrapper">
+            <a href="gallery.php" class="gallery-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Retour à la galerie</span>
+            </a>
             <div class="image-larger">
                 <img src="<?= htmlspecialchars($image['path']) ?>"
                      alt="<?= htmlspecialchars($image['caption'] ?? 'Image') ?>">
             </div>
             <p class="image-caption"><?= htmlspecialchars($image['caption']) ?></p>
             <p class="image-date">Posté le <?= date("d/m/Y à H:i", strtotime($image['created_at'])) ?></p>
-            <a href="gallery.php" class="gallery-link">← Retour à la galerie</a>
         </div>
 
         <div class="comments-section">
@@ -68,7 +71,7 @@ include "templates/header.php";
                 <?php foreach ($comments as $comment): ?>
                     <div class="comment-item">
                         <div class="avatar"></div>
-                        <div class="comment-content">
+                        <div class="comment-bubble">
                             <div class="comment-header">
                                 <span class="comment-author"><?= htmlspecialchars($comment['display_name']) ?></span>
                                 <span class="comment-date"><?= date('d M Y, H\hi', strtotime($comment['created_at'])) ?></span>
@@ -76,6 +79,7 @@ include "templates/header.php";
                             <div class="comment-text"><?= nl2br(htmlspecialchars($comment['comment_text'])) ?></div>
                         </div>
                     </div>
+
                 <?php endforeach; ?>
             <?php endif; ?>
 
