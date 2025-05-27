@@ -17,7 +17,6 @@ include 'templates/header.php';
 
 <div class="page-wrapper">
     <?php include 'templates/sidebar.php'; ?>
-
     <main class="main-content search-page">
         <div class="search-wrapper">
             <form action="search.php" method="get" class="search-bar">
@@ -54,3 +53,4 @@ include 'templates/header.php';
 </div>
 
 <?php include 'templates/footer.php'; ?>
+<script src="assets/js/sidebar-menu-handler.js"></script>
